@@ -3,6 +3,6 @@
     public class StudentMarks
     {
         public string Nume { get; set; }
-        public List<float> Nota { get; set; }
+        public List<float> Note { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +14,12 @@ namespace TestC_.Services
     public class StudentService : IStudentService
     {
         private readonly UniversitateContext _universitateContext;
+        private readonly IMapper _mapper;
 
-        public StudentService(UniversitateContext universitateContext)
+        public StudentService(UniversitateContext universitateContext, IMapper mapper)
         {
             _universitateContext = universitateContext;
+            _mapper = mapper;
         }
 
         public async Task<string> GetAverageMark(int studentId)
@@ -48,11 +51,20 @@ namespace TestC_.Services
             return (sum/courses.Count).ToString("0.00");
         }
 
-        //public async Task<List<StudentMarks>> GetAll(int studentId)
-        //{
-        //    var studentMarks = await _universitateContext.Notes
-        //        .Where(n => n.IdStudent == studentId)
-        //        .ToListAsync();
-        //}
+        public async Task<List<StudentMarks>> GetAllMarksForStudent(int studentId)
+        {
+            var studentMarksQuery = _universitateContext.Notes
+                        .Where(n => n.IdStudent == studentId)
+                        .GroupBy(n => new { n.IdMaterie, n.IdMaterieNavigation.Nume })
+                        .Select(group => new StudentMarks
+                        {
+                            Nume = group.Key.Nume,
+                            Note = group.Select(note => note.Nota).ToList()
+                        });
+
+            var studentMarks = await studentMarksQuery.ToListAsync();
+
+            return studentMarks;
+        }
     }
 }

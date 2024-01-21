@@ -5,7 +5,7 @@ namespace TestC_.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class StudentController : Controller
+    public class StudentController : ControllerBase
     {
         private readonly IStudentService _studentService;
 
@@ -18,6 +18,12 @@ namespace TestC_.Controllers
         public async Task<IActionResult> GetAverageMark([FromRoute] int studentId)
         {
             return Ok(await _studentService.GetAverageMark(studentId));
+        }
+
+        [HttpGet("note/{studentId:int}")]
+        public async Task<IActionResult> GetAllMarksForStudent([FromRoute] int studentId)
+        {
+            return Ok(await _studentService.GetAllMarksForStudent(studentId));
         }
     }
 }

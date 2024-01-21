@@ -1,11 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TestC_.IServices;
 using TestC_.Models;
 using TestC_.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(); 
+MapperConfiguration mapperConfig = new MapperConfiguration(mc =>
+{
+});
+
+IMapper mapper = mapperConfig.CreateMapper();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddEndpointsApiExplorer();

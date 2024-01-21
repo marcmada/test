@@ -4,7 +4,7 @@ namespace TestC_.IServices
 {
     public interface IStudentService
     {
-        //Task<List<StudentMarks>> GetAll(int studentId);
+        Task<List<StudentMarks>> GetAllMarksForStudent(int studentId);
         Task<string> GetAverageMark(int studentId);
     }
 }
