@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using TestC_.IServices;
 
 namespace TestC_.Controllers
@@ -15,12 +16,14 @@ namespace TestC_.Controllers
         }
 
         [HttpGet("{studentId:int}")]
+        [Authorize]
         public async Task<IActionResult> GetAverageMark([FromRoute] int studentId)
         {
             return Ok(await _studentService.GetAverageMark(studentId));
         }
 
         [HttpGet("note/{studentId:int}")]
+        [Authorize]
         public async Task<IActionResult> GetAllMarksForStudent([FromRoute] int studentId)
         {
             return Ok(await _studentService.GetAllMarksForStudent(studentId));

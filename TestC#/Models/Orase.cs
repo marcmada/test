@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TestC_.Models;
+﻿namespace TestC_.Models;
 
 public partial class Orase
 {

@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using TestC_.Handlers;
 using TestC_.IServices;
 using TestC_.Models;
 using TestC_.Services;
@@ -17,6 +19,10 @@ builder.Services.AddScoped<IStudentService, StudentService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAuthentication("BasicAuthentication")
+        .AddScheme<AuthenticationSchemeOptions, BasicAuthenticationHandler>("BasicAuthentication", null);
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(option =>
 {
@@ -51,6 +57,7 @@ app.UseHttpsRedirection();
 
 app.UseCors("MyPolicy");
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
