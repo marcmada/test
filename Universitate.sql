@@ -4,7 +4,7 @@ COLLATE SQL_Romanian_CP1250_CS_AS;
 
 USE Universitate;
 
---/*
+/*
 drop database Universitate;
 drop table Note;
 drop table Student;
@@ -486,6 +486,21 @@ GROUP BY Id_Student
 ORDER BY Id_Student;
 
 -- 16.
+;WITH NoteOrdonate AS (
+    SELECT Id_Grupa, Id_Student, Id_Materie, Nota,
+			ROW_NUMBER() OVER (PARTITION BY Id_Grupa, Id_Student, Id_Materie ORDER BY Nota DESC) AS NotaOrdonata
+	FROM Note n
+	JOIN Student s ON s.Id = n.Id_Student
+	JOIN Grupa g ON g.Id = s.Id_Grupa
+)
+
+SELECT Id_Grupa, Subquery.[Media generala pe grupa]
+FROM (
+	SELECT Id_Grupa, CONVERT(DECIMAL(10,2), AVG(Nota)) AS "Media generala pe grupa"
+	FROM NoteOrdonate
+	WHERE NotaOrdonata = 1
+	GROUP BY Id_Grupa ) AS Subquery
+ORDER BY Id_Grupa;
 
 -- 17.
 ;WITH NoteOrdonate AS (
